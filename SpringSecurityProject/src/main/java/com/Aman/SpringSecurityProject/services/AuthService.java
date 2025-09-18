@@ -36,7 +36,6 @@ public class AuthService {
             throw new BadCredentialsException("User Already Exists");
         }
 
-
         User toBeCreatedUser = modelMapper.map(signUpDTO, User.class);
         toBeCreatedUser.setPassword(passwordEncoder.encode(toBeCreatedUser.getPassword()));
         User createdUser = userRepository.save(toBeCreatedUser);

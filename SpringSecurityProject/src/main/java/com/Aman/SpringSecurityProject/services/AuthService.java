@@ -1,6 +1,7 @@
 package com.Aman.SpringSecurityProject.services;
 
 import com.Aman.SpringSecurityProject.dto.LoginDTO;
+import com.Aman.SpringSecurityProject.dto.LoginResponseDTO;
 import com.Aman.SpringSecurityProject.dto.SignUpDTO;
 import com.Aman.SpringSecurityProject.dto.UserDTO;
 import com.Aman.SpringSecurityProject.entities.User;
@@ -21,14 +22,11 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserRepository userRepository;
-
     private final ModelMapper modelMapper;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtService jwtService;
+    private final UserService userService;
 
     public UserDTO signUp(SignUpDTO signUpDTO) {
         Optional<User> user = userRepository.findByEmail(signUpDTO.getEmail());
@@ -42,12 +40,31 @@ public class AuthService {
         return modelMapper.map(createdUser, UserDTO.class);
     }
 
-    public String login(LoginDTO loginDTO) {
+    public LoginResponseDTO login(LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
         );
 
         User user = (User) authentication.getPrincipal();
-        return jwtService.generateToken(user);
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        return LoginResponseDTO
+                .builder()
+                .id(user.getId())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public LoginResponseDTO refreshToken(String refreshToken) {
+        Long userId = jwtService.getUserIdFomToken(refreshToken);
+        User user = userService.getUserById(userId);
+        String accessToken = jwtService.generateAccessToken(user);
+        return LoginResponseDTO
+                .builder()
+                .id(user.getId())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

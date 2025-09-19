@@ -33,9 +33,9 @@ public class WebSecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
-                        .failureUrl("/login?error=true")
-                        .successHandler(oAuth2SuccessHandler))
+//                .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
+//                        .failureUrl("/login?error=true")
+//                        .successHandler(oAuth2SuccessHandler))
                 .build();
     }
 

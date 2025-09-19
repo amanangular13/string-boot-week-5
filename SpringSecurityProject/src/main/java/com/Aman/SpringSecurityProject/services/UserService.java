@@ -24,4 +24,12 @@ public class UserService implements UserDetailsService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("email not found"));
     }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public User save(User newUser) {
+        return userRepository.save(newUser);
+    }
 }

@@ -24,10 +24,10 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
-
     @Value("${deploy.env}")
     private String deployEnv;
+
+    private final AuthService authService;
 
     @PostMapping(path = "/signup")
     public ResponseEntity<UserDTO> signUp(@RequestBody SignUpDTO signUpDTO) {

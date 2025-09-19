@@ -1,5 +1,6 @@
 package com.Aman.SpringSecurityProject.dto;
 
+import com.Aman.SpringSecurityProject.entities.enums.Permission;
 import com.Aman.SpringSecurityProject.entities.enums.Role;
 import lombok.Data;
 

@@ -15,7 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.Aman.SpringSecurityProject.entities.enums.Role.*;
+import static com.Aman.SpringSecurityProject.entities.enums.Permission.*;
+
 
 @Configuration
 @EnableWebSecurity
@@ -35,9 +36,8 @@ public class WebSecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(publicRoutes).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/posts/**").hasAnyRole(ADMIN.name(), USER.name(), CREATER.name())
-                        .requestMatchers(HttpMethod.POST, "/posts/**").hasRole(CREATER.name())
-                        .requestMatchers(HttpMethod.DELETE, "/posts/**").hasRole(ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/posts/**")
+                            .hasAuthority(POST_VIEW.name())
                         .anyRequest().authenticated())
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
